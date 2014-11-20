@@ -31,7 +31,7 @@ public class GhostController : MonoBehaviour {
 			transform.position = new Vector3(0, 1.5f, 0);
 		}
 		
-		Vector3 movement = GetMovement();
+		Vector3 movement = GetMovement(this.direction, this.speed);
 		transform.position = transform.position + (movement * Time.deltaTime);
 
 		freeze = (freeze > 0) ? freeze - Time.deltaTime : 0;
@@ -63,7 +63,6 @@ public class GhostController : MonoBehaviour {
 	}
 	
 	void SwitchDirection() {
-		//transform.position = transform.position - (GetMovement() * 0.001f);
 		Direction randomDirection;
 		do {
 			randomDirection = getRandomDirection();
@@ -75,10 +74,15 @@ public class GhostController : MonoBehaviour {
 			lockDirection = direction;
 		}
 
+		// Move slightly back so that passing a gap sideways
+		// doesn't trigger OnTriggerEnter
+		Vector3 counterMove = GetMovement(this.direction, 0.1f);
+
 		direction = randomDirection;
+		transform.position = transform.position - counterMove;
 	}
 
-	Vector3 GetMovement() {
+	static Vector3 GetMovement(Direction direction, float speed) {
 		Vector3 movement;
 		if (direction == Direction.UP) {
 			movement = new Vector3(0, 0, speed);
