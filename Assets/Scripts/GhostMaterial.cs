@@ -1,17 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MiniMapController : MonoBehaviour {
+public class GhostMaterial : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+		gameObject.renderer.material.color = Color.cyan;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown ("m")) {
-			this.camera.enabled = !this.camera.enabled;
-		}
+	
 	}
 }
