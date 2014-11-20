@@ -3,14 +3,12 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour {
 	public float speed;
-	public GUIText countText;
-	public GUIText winText;
+	public GameObject goalObject;
 	private int count;
+	private bool dead;
 
 	void Start() {
 		count = 0;
-		SetCountText();
-		winText.text = "";
 	}
 
 	void FixedUpdate () {
@@ -19,44 +17,27 @@ public class PlayerController : MonoBehaviour {
 
 		Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical);
 		rigidbody.AddForce(movement * speed * Time.deltaTime);
-
-		if (isGod()) {
-			countText.text = "You are a GOD";
-		} else {
-			countText.text = "";
-		}
 	}
 
 	void OnTriggerEnter(Collider other) {
-		if (other.gameObject.tag == "PickUp") {
+		if (other.gameObject == this.goalObject) {
 			other.gameObject.SetActive(false);
 			count++;
-			SetCountText();
 		} else if (other.gameObject.tag == "Enemy" && !isGod()) {
 			this.gameObject.SetActive(false);
-			SetLoseText();
+			this.dead = true;
 		}
 	}
-
-	void SetCountText() {
-		if (isWin()) {
-			winText.text = "You win!";
-		}
-	}
-
-	void SetLoseText() {
-		if (!isWin ()) {
-			winText.text = "You lose :(";
-		} else {
-			winText.text = "Feeling fat?";
-		}
-	}
-
-	bool isWin() {
+	
+	public bool isWin() {
 		return (count >= 1);
 	}
 
-	bool isGod() {
+	public bool isDead() {
+		return this.dead;
+	}
+
+	public bool isGod() {
 		return Input.GetKey("g");
 	}
 }
