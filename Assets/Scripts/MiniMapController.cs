@@ -3,8 +3,8 @@ using System.Collections;
 
 public class MiniMapController : MonoBehaviour {
 
-	private static readonly float MM_FOV = 40.0f;
-	private static readonly float NO_MM_FOV = 80f;
+	private static readonly float MM_FOV = 30.0f;
+	private static readonly float NO_MM_FOV = 55f;
 	private static readonly float VIEWPORT_W = 0.40f;
 	private static readonly float VIEWPORT_H = 0.35f;
 
