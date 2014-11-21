@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
-		if (other.gameObject == this.goalObject) {
+		if (other.gameObject.tag == "PickUp") {
 			other.gameObject.SetActive(false);
 			count++;
 		} else if (other.gameObject.tag == "Enemy" && !isGod()) {
@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	public bool isWin() {
-		return (count >= 1);
+		return (count >= 2);
 	}
 
 	public bool isDead() {

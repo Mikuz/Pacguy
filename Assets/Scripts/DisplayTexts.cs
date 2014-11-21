@@ -4,6 +4,7 @@ using System.Collections;
 public class DisplayTexts : MonoBehaviour {
 
 	public PlayerController player;
+	public MiniMapController map;
 	public GUIText statusText;
 	public GUIText winText;
 
@@ -31,6 +32,8 @@ public class DisplayTexts : MonoBehaviour {
 		
 		if (player.isGod()) {
 			statusText.text = "You are a GOD";
+		} else if (map.isMapOpenFirstTime()) {
+			statusText.text = "Press M to close the map";
 		} else {
 			statusText.text = "";
 		}
