@@ -39,9 +39,12 @@ public class GhostController : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
-		if (!(other.gameObject.tag == "Player") && 
-		    !(other.gameObject.tag == "Ghost") &&
+		if (other.gameObject.tag != "Player" && 
+		    other.gameObject.tag != "Enemy" &&
+		    other.gameObject.tag != "Ghost" &&
+		    other.gameObject.tag != "PickUp" &&
 		    freeze <= 0) {
+			//Debug.Log("Tag " + other.gameObject.tag);
 			SwitchDirection ();
 		}
 		//Debug.Log("Direction " + direction);
