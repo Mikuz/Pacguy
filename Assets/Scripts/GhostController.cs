@@ -4,10 +4,9 @@ using System;
 
 public class GhostController : MonoBehaviour {
 
-	enum Direction { UP, DOWN, LEFT, RIGHT };
-
+	public bool stop = false;
 	public float speed;
-	private Direction direction;
+	public Direction direction = Direction.UP;
 	/// <summary>
 	/// Direction that is already being touched
 	/// </summary>
@@ -20,7 +19,7 @@ public class GhostController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		direction = Direction.UP;
+
 	}
 	
 	// Update is called once per frame
@@ -30,24 +29,49 @@ public class GhostController : MonoBehaviour {
 			Debug.LogWarning("Ghost has not been touching the Ground. Reset position.");
 			transform.position = new Vector3(0, 1.5f, 0);
 		}
-		
-		Vector3 movement = GetMovement(this.direction, this.speed);
-		transform.position = transform.position + (movement * Time.deltaTime);
+
+		if (!stop) {
+			Vector3 movement = GetMovement (this.direction, this.speed);
+			transform.position = transform.position + (movement * Time.deltaTime);
+		}
 
 		freeze = (freeze > 0) ? freeze - Time.deltaTime : 0;
 		grounded += Time.deltaTime;
 	}
 
 	void OnTriggerEnter(Collider other) {
-		if (other.gameObject.tag != "Player" && 
-		    other.gameObject.tag != "Enemy" &&
-		    other.gameObject.tag != "Ghost" &&
-		    other.gameObject.tag != "PickUp" &&
-		    freeze <= 0) {
-			//Debug.Log("Tag " + other.gameObject.tag);
-			SwitchDirection ();
+		if (freeze <= 0) {
+
+			if (other.gameObject.tag == "Blocker") {
+				BlockerInfo blocker = (BlockerInfo) other.gameObject.GetComponent("BlockerInfo");
+				if (direction == blocker.inDirection) {
+					Direction randomDirection;
+					do {
+						randomDirection = getRandomDirection();
+					} while (!blocker.outDirections.Contains(randomDirection));
+
+					if (new System.Random().Next(3) == 0) {
+						// 25% chance to not change direction
+						CounterMove();
+						direction = randomDirection;
+						Debug.Log("Blocker changing to: " + randomDirection);
+					} else {
+						Debug.Log("Blocker not changing to: " + randomDirection);
+					}
+				} else {
+					Debug.Log("Blocker wrong direction");
+				}
+			} else if (other.gameObject.tag != "Player" && 
+			           other.gameObject.tag != "Enemy" &&
+			           other.gameObject.tag != "Ghost" &&
+			           other.gameObject.tag != "PickUp" &&
+			           freeze <= 0) {
+				//Debug.Log("Tag " + other.gameObject.tag);
+				SwitchDirection ();
+			}
+			//Debug.Log("Direction " + direction);
+
 		}
-		//Debug.Log("Direction " + direction);
 	}
 
 	void OnTriggerExit(Collider other) {
@@ -77,11 +101,15 @@ public class GhostController : MonoBehaviour {
 			lockDirection = direction;
 		}
 
+		CounterMove();
+		direction = randomDirection;
+
+	}
+
+	void CounterMove() {
 		// Move slightly back so that passing a gap sideways
 		// doesn't trigger OnTriggerEnter
 		Vector3 counterMove = GetMovement(this.direction, 0.1f);
-
-		direction = randomDirection;
 		transform.position = transform.position - counterMove;
 	}
 

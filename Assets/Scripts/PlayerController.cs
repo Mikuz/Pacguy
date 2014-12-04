@@ -17,6 +17,12 @@ public class PlayerController : MonoBehaviour {
 
 		Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical);
 		rigidbody.AddForce(movement * speed * Time.deltaTime);
+
+		if (isGod()) {
+			gameObject.renderer.material.color = Color.yellow;
+		} else {
+			gameObject.renderer.material.color = Color.white;
+		}
 	}
 
 	void OnTriggerEnter(Collider other) {
