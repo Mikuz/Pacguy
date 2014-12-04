@@ -3,9 +3,11 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour {
 	public float speed;
-	public GameObject goalObject;
 	private int count;
 	private bool dead;
+	public AudioSource dyingSound;
+	public AudioSource pickupSound;
+	public AudioSource winSound;
 
 	void Start() {
 		count = 0;
@@ -19,7 +21,7 @@ public class PlayerController : MonoBehaviour {
 		rigidbody.AddForce(movement * speed * Time.deltaTime);
 
 		if (isGod()) {
-			gameObject.renderer.material.color = Color.yellow;
+			gameObject.renderer.material.color = Color.red;
 		} else {
 			gameObject.renderer.material.color = Color.white;
 		}
@@ -29,9 +31,14 @@ public class PlayerController : MonoBehaviour {
 		if (other.gameObject.tag == "PickUp") {
 			other.gameObject.SetActive(false);
 			count++;
+			pickupSound.Play();
+			if (isWin ()) {
+				winSound.Play();
+			}
 		} else if (other.gameObject.tag == "Enemy" && !isGod()) {
 			this.gameObject.SetActive(false);
 			this.dead = true;
+			this.dyingSound.Play();
 		}
 	}
 	

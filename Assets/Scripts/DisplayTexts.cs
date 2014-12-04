@@ -24,7 +24,7 @@ public class DisplayTexts : MonoBehaviour {
 			if (!player.isWin ()) {
 				winText.text = "You lose :(";
 			} else {
-				winText.text = "Feeling fat?";
+				winText.text = "I can't find you";
 			}
 		} else if (player.isWin()) {
 			winText.text = "You win!";

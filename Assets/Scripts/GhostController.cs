@@ -41,15 +41,11 @@ public class GhostController : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
-		if (!isFreeze()) {
+		if (!isFreeze() && 
+		    GhostController.isCollidable(other.gameObject.tag)) {
 
-			if (other.gameObject.tag != "Player" && 
-			           other.gameObject.tag != "Enemy" &&
-			           other.gameObject.tag != "PickUp" &&
-			           other.gameObject.tag != "Blocker") {
-				//Debug.Log("Tag " + other.gameObject.tag);
-				WallDirectionSwitch();
-			}
+			//Debug.Log("Tag " + other.gameObject.tag);
+			WallDirectionSwitch();
 			//Debug.Log("Direction " + direction);
 
 		}
@@ -98,6 +94,14 @@ public class GhostController : MonoBehaviour {
 		return (this.freeze > 0);
 	}
 
+	public static Boolean isCollidable(String tag) {
+		return  !(tag == "Player" || 
+			      tag == "Enemy"  ||
+				  tag == "Ghost"  ||
+				  tag == "PickUp" ||
+				  tag == "Blocker");
+	}
+	
 	static Vector3 GetMovement(Direction direction, float speed) {
 		Vector3 movement;
 		if (direction == Direction.UP) {
