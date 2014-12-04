@@ -11,7 +11,7 @@ public class GhostController : MonoBehaviour {
 	/// <summary>
 	/// Direction that is already being touched
 	/// </summary>
-	private Direction lockDirection;
+	public Direction lockDirection;
 	/// <summary>
 	/// Blocks direction changing
 	/// </summary>
