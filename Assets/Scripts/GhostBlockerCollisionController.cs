@@ -34,18 +34,18 @@ public class GhostBlockerCollisionController : MonoBehaviour {
 				if (blocker.outDirections.Contains(d)) randomizable.Add(d);
 			}
 			Direction randomDirection = GhostController.getRandomDirection(randomizable);
-			
-			
-			if (new System.Random().Next(3) == 0) {
-				// 25% chance to not change direction
+
+			// E.g. (1/0.25)-1=3, Probability of 0 to 3 being 0 is 0.25 
+			int probability = (int)Math.Round(1d/blocker.probability)-1;
+			if (new System.Random().Next(probability) == 0) {
 				ghostController.CounterMove();
 				ghostController.direction = randomDirection;
-				Debug.Log("Blocker changing to: " + randomDirection);
+				//Debug.Log("Blocker changing to: " + randomDirection);
 			} else {
-				Debug.Log("Blocker not changing to: " + randomDirection);
+				//Debug.Log("Blocker not changing to: " + randomDirection);
 			}
 		} else {
-			Debug.Log("Blocker wrong direction");
+			//Debug.Log("Blocker wrong direction");
 		}
 	}
 }

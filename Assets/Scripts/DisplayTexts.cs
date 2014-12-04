@@ -22,7 +22,7 @@ public class DisplayTexts : MonoBehaviour {
 	void updateTexts() {
 		if (player.isDead()) {
 			if (!player.isWin ()) {
-				winText.text = "You lose :(";
+				winText.text = "You lose :(\nNoob";
 			} else {
 				winText.text = "I can't find you";
 			}

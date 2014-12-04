@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GhostMaterial : MonoBehaviour {
+public class GroundMaterial : MonoBehaviour {
 
-	public Color color = new Color32(127, 0, 255, 1);
-
+	public Color color = new Color32(0, 0, 0, 1);
+	
 	// Use this for initialization
 	void Start () {
 		gameObject.renderer.material.color = color;
