@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 public class GhostController : MonoBehaviour {
 
@@ -40,34 +41,14 @@ public class GhostController : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
-		if (freeze <= 0) {
+		if (!isFreeze()) {
 
-			if (other.gameObject.tag == "Blocker") {
-				BlockerInfo blocker = (BlockerInfo) other.gameObject.GetComponent("BlockerInfo");
-				if (direction == blocker.inDirection) {
-					Direction randomDirection;
-					do {
-						randomDirection = getRandomDirection();
-					} while (!blocker.outDirections.Contains(randomDirection));
-
-					if (new System.Random().Next(3) == 0) {
-						// 25% chance to not change direction
-						CounterMove();
-						direction = randomDirection;
-						Debug.Log("Blocker changing to: " + randomDirection);
-					} else {
-						Debug.Log("Blocker not changing to: " + randomDirection);
-					}
-				} else {
-					Debug.Log("Blocker wrong direction");
-				}
-			} else if (other.gameObject.tag != "Player" && 
+			if (other.gameObject.tag != "Player" && 
 			           other.gameObject.tag != "Enemy" &&
-			           other.gameObject.tag != "Ghost" &&
 			           other.gameObject.tag != "PickUp" &&
-			           freeze <= 0) {
+			           other.gameObject.tag != "Blocker") {
 				//Debug.Log("Tag " + other.gameObject.tag);
-				SwitchDirection ();
+				WallDirectionSwitch();
 			}
 			//Debug.Log("Direction " + direction);
 
@@ -89,12 +70,12 @@ public class GhostController : MonoBehaviour {
 		}
 	}
 	
-	void SwitchDirection() {
-		Direction randomDirection;
-		do {
-			randomDirection = getRandomDirection();
-		} while (randomDirection == direction || 
-		         randomDirection == lockDirection);
+	void WallDirectionSwitch() {
+		List<Direction> randomizable = new List<Direction>();
+		foreach (Direction d in Enum.GetValues(typeof(Direction))) {
+			if (d != direction && d != lockDirection) randomizable.Add(d);
+		}
+		Direction randomDirection = getRandomDirection(randomizable);
 
 		if (randomDirection != getCounterDirection(direction)) {
 			// Lock current direction if ghost dosn't back off from it
@@ -106,11 +87,15 @@ public class GhostController : MonoBehaviour {
 
 	}
 
-	void CounterMove() {
+	public void CounterMove() {
 		// Move slightly back so that passing a gap sideways
 		// doesn't trigger OnTriggerEnter
 		Vector3 counterMove = GetMovement(this.direction, 0.1f);
 		transform.position = transform.position - counterMove;
+	}
+
+	public bool isFreeze() {
+		return (this.freeze > 0);
 	}
 
 	static Vector3 GetMovement(Direction direction, float speed) {
@@ -127,11 +112,10 @@ public class GhostController : MonoBehaviour {
 		return movement;
 	}
 
-	static Direction getRandomDirection() {
-		Array values = Enum.GetValues(typeof(Direction));
+	public static Direction getRandomDirection(List<Direction> directions) {
 		System.Random random = new System.Random();
-		int randomDirection = random.Next(values.Length);
-		return (Direction)values.GetValue(randomDirection);
+		int index = random.Next(directions.Count);
+		return directions[index];
 	}
 
 	static bool isDirectionVertical(Direction direction) {
