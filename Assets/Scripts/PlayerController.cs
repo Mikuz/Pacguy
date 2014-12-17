@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour {
 	public AudioSource dyingSound;
 	public AudioSource pickupSound;
 	public AudioSource winSound;
+	public AudioSource speedSound;
 
 	void Start() {
 		count = 0;
@@ -25,6 +26,12 @@ public class PlayerController : MonoBehaviour {
 		} else {
 			gameObject.renderer.material.color = Color.white;
 		}
+
+		float vol = rigidbody.velocity.sqrMagnitude / 150;
+		if (vol < 0.1) {
+			vol = 0;
+		}
+		speedSound.volume = vol;
 	}
 
 	void OnTriggerEnter(Collider other) {
@@ -38,6 +45,7 @@ public class PlayerController : MonoBehaviour {
 		} else if (other.gameObject.tag == "Enemy" && !isGod()) {
 			this.gameObject.SetActive(false);
 			this.dead = true;
+			speedSound.volume = 0;
 			this.dyingSound.Play();
 		}
 	}
