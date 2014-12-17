@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		float vol = rigidbody.velocity.sqrMagnitude / 150;
-		if (vol < 0.1) {
+		if ((vol < 0.12 && !speedPlaying) || vol < 0.08) {
 			vol = 0;
 		}
 		if (vol == 0) {
