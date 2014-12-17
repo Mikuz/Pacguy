@@ -9,9 +9,11 @@ public class PlayerController : MonoBehaviour {
 	public AudioSource pickupSound;
 	public AudioSource winSound;
 	public AudioSource speedSound;
+	private bool speedPlaying;
 
 	void Start() {
 		count = 0;
+		speedPlaying = false;
 	}
 
 	void FixedUpdate () {
@@ -31,6 +33,13 @@ public class PlayerController : MonoBehaviour {
 		if (vol < 0.1) {
 			vol = 0;
 		}
+		if (vol == 0) {
+			speedSound.Stop();
+			speedPlaying = false;
+		} else if (!speedPlaying) {
+			speedSound.Play();
+			speedPlaying = true;
+		}
 		speedSound.volume = vol;
 	}
 
@@ -45,7 +54,7 @@ public class PlayerController : MonoBehaviour {
 		} else if (other.gameObject.tag == "Enemy" && !isGod()) {
 			this.gameObject.SetActive(false);
 			this.dead = true;
-			speedSound.volume = 0;
+			this.speedSound.Stop();
 			this.dyingSound.Play();
 		}
 	}
