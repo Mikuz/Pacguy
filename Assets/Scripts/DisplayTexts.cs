@@ -29,11 +29,13 @@ public class DisplayTexts : MonoBehaviour {
 		} else if (player.isWin()) {
 			winText.text = "You win!";
 		}
-		
+
+		statusText.color = Color.white;
 		if (player.isGod()) {
 			statusText.text = "You are a GOD";
 		} else if (map.isMapOpenFirstTime()) {
-			statusText.text = "Press M to close the map";
+			statusText.color = Color.yellow;
+			statusText.text = "Press M to toggle minimap!";
 		} else {
 			statusText.text = "";
 		}
