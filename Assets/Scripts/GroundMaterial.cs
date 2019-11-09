@@ -7,7 +7,7 @@ public class GroundMaterial : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		gameObject.renderer.material.color = color;
+		gameObject.GetComponent<Renderer>().material.color = color;
 	}
 	
 	// Update is called once per frame

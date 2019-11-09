@@ -21,15 +21,15 @@ public class PlayerController : MonoBehaviour {
 		float moveVertical = Input.GetAxis("Vertical");
 
 		Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical);
-		rigidbody.AddForce(movement * speed * Time.deltaTime);
+		GetComponent<Rigidbody>().AddForce(movement * speed * Time.deltaTime);
 
 		if (isGod()) {
-			gameObject.renderer.material.color = Color.red;
+			gameObject.GetComponent<Renderer>().material.color = Color.red;
 		} else {
-			gameObject.renderer.material.color = Color.white;
+			gameObject.GetComponent<Renderer>().material.color = Color.white;
 		}
 
-		float vol = rigidbody.velocity.sqrMagnitude / 150;
+		float vol = GetComponent<Rigidbody>().velocity.sqrMagnitude / 150;
 		if ((vol < 0.12 && !speedPlaying) || vol < 0.08) {
 			vol = 0;
 		}
