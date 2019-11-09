@@ -40,21 +40,21 @@ public class MiniMapController : MonoBehaviour {
 		}
 
 		// Adjust FOV
-		if (mainCamera.camera.fieldOfView != destinyFov) {
+		if (mainCamera.GetComponent<Camera>().fieldOfView != destinyFov) {
 			float fovChange = 50 * Time.deltaTime * (minimap ? -1 : 1);
-			float nextFov = mainCamera.camera.fieldOfView + fovChange;
+			float nextFov = mainCamera.GetComponent<Camera>().fieldOfView + fovChange;
 			if (( minimap && nextFov > destinyFov) ||
 			    (!minimap && nextFov < destinyFov)) {
-				mainCamera.camera.fieldOfView = nextFov;
+				mainCamera.GetComponent<Camera>().fieldOfView = nextFov;
 			} else {
-				mainCamera.camera.fieldOfView = destinyFov;
+				mainCamera.GetComponent<Camera>().fieldOfView = destinyFov;
 			}
 		}
 
 		// Adjust minimap
 		if (minimap) {
-			if (Mathf.Abs(mainCamera.camera.fieldOfView - destinyFov) < 10) {
-				this.camera.enabled = true;
+			if (Mathf.Abs(mainCamera.GetComponent<Camera>().fieldOfView - destinyFov) < 10) {
+				this.GetComponent<Camera>().enabled = true;
 				viewportW = viewportW + 1.5f * Time.deltaTime;
 				viewportH = viewportH + 1.5f * Time.deltaTime;
 				if (viewportW > VIEWPORT_W) viewportW = VIEWPORT_W;
@@ -66,11 +66,11 @@ public class MiniMapController : MonoBehaviour {
 			if (viewportW < 0) viewportW = 0;
 			if (viewportH < 0) viewportH = 0;
 			if (viewportW == 0 && viewportH == 0) {
-				this.camera.enabled = false;
+				this.GetComponent<Camera>().enabled = false;
 			}
 		}
 
-		this.camera.rect = new Rect(0.01f, 0.01f, viewportW, viewportH);
+		this.GetComponent<Camera>().rect = new Rect(0.01f, 0.01f, viewportW, viewportH);
 	}
 
 	public bool isMapOpenFirstTime() {
